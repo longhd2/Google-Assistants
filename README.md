@@ -97,5 +97,19 @@ env/bin/python -u ./Google-Assistants/src/main.py --project-id 'XXX' --device-mo
 ```sh
 env/bin/python -u ./Google-Assistants/src/main.py
 ```
+### Fix pluseaudio
+```sh
+sudo apt-get update     
+sudo apt-get install git    
+cd /home/${USER}/       
+git clone https://github.com/shivasiddharth/PulseAudio-System-Wide       
+cd ./PulseAudio-System-Wide/      
+sudo cp ./pulseaudio.service /etc/systemd/system/pulseaudio.service    
+systemctl --system enable pulseaudio.service       
+systemctl --system start pulseaudio.service       
+sudo cp ./client.conf /etc/pulse/client.conf        
+sudo sed -i '/^pulse-access:/ s/$/root,pi/' /etc/group    
+```
+
 
 
