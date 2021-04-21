@@ -1,152 +1,107 @@
+# Assistants-Pi
+## One installer for both Google Asistant and Amazon Alexa   
+## Simultaneously run Google Assistant and Alexa on Raspberry Pi    
+*******************************************************************************************************************************
+### **If you like the work, find it useful and if you would like to get me a :coffee: :smile:** [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7GH3YDCHZ36QN)  
 
-### Fix, mod Google-Assistants tiếng việt từ trang 
-```sh
-https://github.com/shivasiddharth/Assistants-Pi
+*******************************************************************************************************************************
+### Note:
+**18/01/2020: Routine update and bug fixes.**  
+****************************************************************
+**Before Starting the setup**
+****************************************************************
+**For Google Assistant**  
+1. Create a project in the Google's Action Console.    
+2. Download credentials--->.json file (refer to this doc for creating credentials https://developers.google.com/assistant/sdk/develop/python/config-dev-project-and-account)   
+
+
+**For Amazon Alexa**  
+1. Create a security profile for alexa-avs-sample-app if you already don't have one.  
+https://github.com/alexa/avs-device-sdk/wiki/Create-Security-Profile  
+
+2. Download the **"config.json"** file. 
+
+
+***************************************************************
+**Setup Amazon Alexa, Google Assistant or Both**     
+***************************************************************
+1. Clone the git using:
 ```
-là dự án  miễn phí, phục vụ cá nhân.
-### 1.Tải OS tại đây:
-```sh
-http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/RaspBerryPi/
+git clone https://github.com/shivasiddharth/Assistants-Pi  
+```    
+**DO NOT RENAME THE CREDENTIALS FILEs**     
+Place the Alexa **config.json in** file in the  **/home/pi/Assistants-Pi/Alexa** directory.        
+Place the Google **client_secret.....json** file in the **/home/pi/** directory.     
+
+2. Make the installers executable using:
 ```
-### 2.Update OS & cài đặt git:
-```sh
-sudo apt-get update && sudo apt-get install git -y
+sudo chmod +x /home/pi/Assistants-Pi/scripts/prep-system.sh    
+sudo chmod +x /home/pi/Assistants-Pi/scripts/audio-test.sh   
+sudo chmod +x /home/pi/Assistants-Pi/scripts/installer.sh  
+```    
+
+3. Prepare the system for installing assistants by updating, upgrading and setting up audio using:  
 ```
-### 3.Cài đặt Mic && Loa nếu sử dụng Mic HAT:
-```sh
-cd /home/${USER}/
-git clone https://github.com/respeaker/seeed-voicecard.git
-cd seeed-voicecard
-sudo ./install.sh --compat-kernel
+sudo /home/pi/Assistants-Pi/scripts/prep-system.sh
+```    
+
+4. Restart the Pi using:
+```
 sudo reboot
-speaker-test
+```    
+
+5. Make sure that contents of asoundrc match the contents of asound.conf    
+   Open a terminal and type:  
+```
+sudo nano /etc/asound.conf
+```
+   Open a second terminal and type:    
+```
+sudo nano ~/.asoundrc
+```  
+   If the contents of .asoundrc are not same as asound.conf, copy the contents from asound.conf to .asoundrc, save using ctrl+x and y
+
+6. Bonus Script - Test the audio setup using the following code (optional). **Dont panic if the test does not go through successfully, proceed with the installation**:  
+```
+sudo /home/pi/Assistants-Pi/scripts/audio-test.sh  
+```     
+
+7. Restart the Pi using:
+```
 sudo reboot
-```
-Sau khi khởi động lại, đăng nhập lại vào console
-Thống kê ID của Mic USB và Loa
-```sh
-arecord -l
-aplay -l
-```
-==> Xong chuyển sang bước 5.
-### 4.Cài đặt Mic && Loa nếu sử dụng Mic USB.
-Chạy lệnh sau
-```sh
-sudo nano /home/pi/.asoundrc
-```
-Cửa sổ nano hiện lên, paste dòng sau, thay thế ID mic, loa phù hợp
+```      
 
-```sh
-pcm.dsnooper {
-    type dsnoop
-    ipc_key 816357492
-    ipc_key_add_uid 0
-    ipc_perm 0666
-    slave {
-        pcm "hw:1,0"
-        channels 1
-    }
-}
+8. Install the assistant/assistants using the following. This is an interactive script, so just follow the onscreen instructions:
+```
+sudo /home/pi/Assistants-Pi/scripts/installer.sh  
+```      
 
-pcm.!default {
-        type asym
-        playback.pcm {
-                type plug
-                slave.pcm "hw:0,0"
-        }
-        capture.pcm {
-                type plug
-                slave.pcm "dsnooper"
-        }
-}
+9. After verification of the assistants, to make them auto start on boot:  
 
+Open a terminal and run the following commands:  
 ```
-Coppy cấu hình âm thanh vào etc:
-```sh
-sudo cp /home/pi/.asoundrc /etc/asound.conf
+sudo chmod +x /home/pi/Assistants-Pi/scripts/service-installer.sh
+sudo /home/pi/Assistants-Pi/scripts/service-installer.sh  
 ```
-==> Chạy lệnh sau để đưa Account đang dùng  vào group root
-```sh
-sudo usermod -aG root pi
+For Alexa:  
 ```
-### 5.Tạo file audiosetup (đặt tên mic tương ứng trong file) trong thư mục /home/pi
-```sh
-USB-MIC-JACK
-USB-MIC-HDMI
-AIY-HAT
-Respeaker-2-Mic
-Respeaker-4-Mic
-Respeaker-Usb-Mic
+sudo systemctl enable alexa.service  
 ```
-### 6.Tải git & cài đặt:
-```sh
-git clone https://github.com/longhd2/Google-Assistants
+For Google Assistant:  
 ```
-Chạy lệnh sau để cài đặt:
-```sh
- sudo chmod +x ./Google-Assistants/install/gassist-installer.sh && sudo  ./Google-Assistants/install/gassist-installer.sh
-```
-### 7.Chạy lần đầu:
-```sh
-env/bin/python -u ./Google-Assistants/src/main.py --project-id 'XXX' --device-model-id 'XXX'
-```
-### 8.Chạy thủ công các lần tiếp theo:
-```sh
-env/bin/python -u ./Google-Assistants/src/main.py
+sudo systemctl enable google-assistant.service  
 ```
 
-### 9.Thiết lập chạy tự động:
-```sh
-sudo nano /etc/supervisor/conf.d/Google-Assistants.conf
+10. Authorize Alexa before restarting  
 ```
-Coppy pass vào thư mục:
-```sh
-[program:Google-Assistants]
-directory=/home/pi
-command=/bin/bash -c 'env/bin/python -u ./Google-Assistants/src/main.py'
-numprocs=1
-autostart=true
-autorestart=true
-user=pi
-```
-Chạy lệnh sau để khởi động chạy tự động:
-```sh
-sudo supervisorctl update
-```
-Xong reboot lại Pi:
-```sh
-sudo reboot
-```
-### 10.Tắt chạy tự động trong phiên làm việc:
-```sh
-sudo supervisorctl stop Google-Assistants
-```
-### 11.Xóa chạy tự động:
-```sh
-sudo rm -rf /etc/supervisor/conf.d/Google-Assistants.conf
+sudo /home/pi/Assistants-Pi/Alexa/startsample.sh  
 ```
 
-######. Note!
-fix: NotImplementedError: mixer module not available (ImportError: libSDL2_mixer-2.0.so.0: cannot open shared object file: No such file or directory)
-```sh
-sudo dpkg --configure -a
-#sudo apt-get install libsdl-ttf2.0-0
-#sudo apt-get install libsdl2-mixer-2.0-0
-sudo apt-get install python3-sdl2 -y
-sudo apt install libportaudio2;
-```
-Đưa lệnh vào env:
-```sh
-source env/bin/activate
-```
-Cài thêm app:
-```sh
-pip install pygame
-```
-Hạ phiên bản VLC:
-```sh
-source env/bin/activate
-pip install python-vlc==3.0.11115
-```
+### Manually Start The Alexa Assistant   
+Double click start.sh file in the /home/pi/Assistants-Pi/Alexa folder and choose to "Execute in the Terminal".       
 
-
+### Manually Start The Google Assistant
+Open a terminal and execute the following:
+```
+/home/pi/env/bin/python -u /home/pi/Assistants-Pi/Google-Assistant/src/main.py --project_id 'replace this with the project id '--device_model_id 'replace this with the model id'
+```   
