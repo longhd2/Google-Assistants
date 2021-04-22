@@ -23,7 +23,6 @@ cd seeed-voicecard
 sudo ./install.sh --compat-kernel
 sudo reboot
 speaker-test
-sudo reboot
 ```
 Sau khi khởi động lại, đăng nhập lại vào console
 Thống kê ID của Mic USB và Loa
