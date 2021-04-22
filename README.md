@@ -96,7 +96,7 @@ env/bin/python -u ./Google-Assistants/src/main.py --project-id 'XXX' --device-mo
 ```sh
 env/bin/python -u ./Google-Assistants/src/main.py
 ```
-### Fix pluseaudio
+### Fix pluseaudio nếu gặp lỗi khi sử dụng Mic Usb với trình phát media VLC
 ```sh
 sudo apt-get update     
 sudo apt-get install git    
