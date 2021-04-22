@@ -6,10 +6,11 @@ https://github.com/shivasiddharth/Assistants-Pi
 ```
 là dự án  miễn phí, phục vụ cá nhân.
 ### 1.Tải OS tại đây và đăng ký credentials :
-```sh
+
 http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/RaspBerryPi/
-```
-Tải credentials--->.json (https://developers.google.com/assistant/sdk/develop/python/config-dev-project-and-account)   
+
+Đăng ký credentials--->.json tại đây
+https://developers.google.com/assistant/sdk/develop/python/config-dev-project-and-account  
 
 ### 2.Update OS & cài đặt git:
 ```sh
@@ -97,9 +98,7 @@ env/bin/python -u ./Google-Assistants/src/main.py --project-id 'XXX' --device-mo
 env/bin/python -u ./Google-Assistants/src/main.py
 ```
 ### Fix pluseaudio nếu gặp lỗi khi sử dụng Mic Usb với trình phát media VLC
-```sh
-sudo apt-get update     
-sudo apt-get install git    
+```sh   
 cd /home/${USER}/       
 git clone https://github.com/shivasiddharth/PulseAudio-System-Wide       
 cd ./PulseAudio-System-Wide/      
